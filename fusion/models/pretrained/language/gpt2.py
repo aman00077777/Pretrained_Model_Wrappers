@@ -2,21 +2,11 @@
 GPT-2 language encoder wrapper.
 
 Usage:
-    from fusion.encoders.language import GPTEncoder
+    from fusion.models.pretrained.language.gpt2 import GPT2Encoder
 
-File name note: loader.py's registry imports this from
-``fusion.encoders.language.gpt`` (``gpt.py``), not ``gpt2.py`` — the
-roadmap doc's own file-naming table says ``gpt2.py``. Named to match
-loader.py, since that's the file GitHub search / the actual import
-statement will look for.
-
-DEVIATION FROM BaseEncoder's BERT/RoBERTa-style default (per the
-roadmap's instruction to flag these to Aman Sharma): GPT-2 is causal
-decoder-only, so it has no CLS token and, unlike encoder models, later
-positions have seen the whole sequence — pooling here takes each
-sequence's *last non-padded token* instead. GPT-2's tokenizer also has
-no pad token by default; one is added (aliased to EOS) the first time
-it's needed.
+GPT-2 is causal decoder-only — no CLS token. Pooling takes each
+sequence's *last non-padded token* instead of first. GPT-2's tokenizer
+has no pad token by default; one is added (aliased to EOS) on first use.
 """
 
 from __future__ import annotations
@@ -31,7 +21,7 @@ from fusion.encoders.language._pooling import last_token_pool
 from fusion.types import ModalTensor
 
 
-class GPTEncoder(BaseEncoder):
+class GPT2Encoder(BaseEncoder):
     """Wraps a Hugging Face GPT-2 model as a FUSION language encoder.
 
     Args:
@@ -51,7 +41,7 @@ class GPTEncoder(BaseEncoder):
         model_name_or_path: str = "gpt2",
         cache_dir: Optional[str] = None,
         **kwargs: Any,
-    ) -> "GPTEncoder":
+    ) -> "GPT2Encoder":
         """Load a pretrained GPT-2 checkpoint + tokenizer from Hugging Face.
 
         Args:
@@ -60,7 +50,7 @@ class GPTEncoder(BaseEncoder):
             **kwargs: Forwarded to ``AutoModel.from_pretrained``.
 
         Returns:
-            An initialised GPTEncoder.
+            An initialised GPT2Encoder.
         """
         tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, cache_dir=cache_dir)
         if tokenizer.pad_token is None:
