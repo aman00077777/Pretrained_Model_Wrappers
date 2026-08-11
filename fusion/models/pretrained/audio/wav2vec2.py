@@ -13,11 +13,14 @@ import torch
 import torch.nn.functional as F
 from transformers import AutoModel, AutoProcessor
 
+
 from fusion.constants import Modality, DEFAULT_AUDIO_SAMPLE_RATE
 from fusion.encoders.base import BaseEncoder
 from fusion.encoders.modal_tensor import ModalTensor
+from fusion.encoders.registry import register_encoder
 
 
+@register_encoder("wav2vec2")
 class Wav2Vec2Encoder(BaseEncoder):
     """Wraps a Hugging Face Wav2Vec2 model as a FUSION audio encoder."""
 
