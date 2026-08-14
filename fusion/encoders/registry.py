@@ -57,4 +57,9 @@ class Registry:
 
 ENCODER_REGISTRY = Registry("encoders")
 
-__all__ = ["ENCODER_REGISTRY", "Registry"]
+# Convenience decorator used by individual encoder modules:
+#   @register_encoder("whisper")
+#   class WhisperEncoder(BaseEncoder): ...
+register_encoder = ENCODER_REGISTRY.register
+
+__all__ = ["ENCODER_REGISTRY", "Registry", "register_encoder"]
